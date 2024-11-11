@@ -144,11 +144,6 @@ public class FakePlayer extends ServerPlayer {
     }
 
     @Override
-    public @NotNull String getIpAddress() {
-        return "127.0.0.1";
-    }
-
-    @Override
     public boolean isControlledByLocalInstance() {
         return true;
     }
