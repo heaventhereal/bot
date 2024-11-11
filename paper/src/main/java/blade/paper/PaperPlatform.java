@@ -24,7 +24,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class PaperPlatform implements ServerPlatform {
     public static JavaPlugin PLUGIN;
     public static final ObjectArrayList <Bot> BOTS = new ObjectArrayList<>();
-    public static final ScheduledExecutorService EXECUTOR = (ScheduledExecutorService) Executors.newCachedThreadPool();
+    public static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(2);
 
     public void register(JavaPlugin plugin) {
         PLUGIN = plugin;
