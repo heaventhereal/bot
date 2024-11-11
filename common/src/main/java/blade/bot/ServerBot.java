@@ -25,10 +25,11 @@ import net.minecraft.world.phys.Vec3;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 public class ServerBot extends Bot implements IServerBot {
     private final ServerPlayer spawner;
-    private ServerBotSettings settings;
+    private final ServerBotSettings settings;
 
     private int healTicks = 0;
     private int noShieldTicks = 0;
@@ -86,7 +87,7 @@ public class ServerBot extends Bot implements IServerBot {
         food.setFoodLevel(20);
         food.setSaturation(20.0f);
 
-        player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).setBaseValue(settings.reach);
+        Objects.requireNonNull(player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE)).setBaseValue(settings.reach);
         applyArmor(vanillaPlayer.getInventory());
     }
 

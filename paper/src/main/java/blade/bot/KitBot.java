@@ -20,6 +20,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.entity.LivingEntity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class KitBot extends Bot implements IServerBot {
@@ -90,7 +91,7 @@ public class KitBot extends Bot implements IServerBot {
             return;
         }
 
-        player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).setBaseValue(settings.reach);
+        Objects.requireNonNull(player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE)).setBaseValue(settings.reach);
     }
 
     @Override

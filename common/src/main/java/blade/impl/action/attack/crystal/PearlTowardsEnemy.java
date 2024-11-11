@@ -26,7 +26,7 @@ public class PearlTowardsEnemy extends BladeAction implements Crystal {
         float time = ConfigKeys.getDifficultyReversed(bot) * 0.3f;
         Vec3 direction = bot.getBlade().get(ConfigKeys.TARGET).position().subtract(bot.getVanillaPlayer().getEyePosition());
         if (tick < time) {
-            bot.lookRealistic(BotMath.getYaw(direction), BotMath.getPitch(direction), tick / time, 0.3f);
+            bot.lookRealistic(BotMath.getYaw(direction), BotMath.getPitch(direction), tick / time);
         }
         if (tick >= time) {
             bot.interact();

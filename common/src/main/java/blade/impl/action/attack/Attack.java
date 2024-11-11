@@ -35,7 +35,7 @@ public interface Attack {
         Vec3 direction = closestPoint.subtract(eyePos);
         float yaw = BotMath.getYaw(direction);
         float pitch = BotMath.getPitch(direction);
-        bot.lookRealistic(yaw, pitch, (tick % time) / time, bot.getBlade().get(ConfigKeys.DIFFICULTY) * 0.2f);
+        bot.lookRealistic(yaw, pitch, (tick % time) / time);
     }
 
     static boolean isPvPSatisfied(Bot bot) {

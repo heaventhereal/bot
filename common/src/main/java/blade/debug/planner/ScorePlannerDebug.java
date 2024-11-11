@@ -2,20 +2,18 @@ package blade.debug.planner;
 
 import blade.planner.score.ScoreAction;
 import blade.planner.score.ScorePlanner;
-
-import java.util.HashMap;
-import java.util.Map;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 public class ScorePlannerDebug {
     private double temperature;
     private ScoreAction actionTaken;
-    private Map<ScoreAction, ScorePlanner.Score> scores = new HashMap<>();
+    private Object2ObjectOpenHashMap<ScoreAction, ScorePlanner.Score> scores = new Object2ObjectOpenHashMap<>();
 
-    public Map<ScoreAction, ScorePlanner.Score> getScores() {
+    public Object2ObjectOpenHashMap<ScoreAction, ScorePlanner.Score> getScores() {
         return scores;
     }
 
-    public void setScores(Map<ScoreAction, ScorePlanner.Score> scores) {
+    public void setScores(Object2ObjectOpenHashMap<ScoreAction, ScorePlanner.Score> scores) {
         this.scores = scores;
     }
 

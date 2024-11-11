@@ -10,10 +10,9 @@ import blade.planner.score.ScoreState;
 import blade.util.blade.BladeAction;
 import blade.util.blade.BladeGoal;
 import blade.util.blade.ConfigKey;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BladeMachine {
@@ -21,9 +20,9 @@ public class BladeMachine {
     protected final ScoreState state = new ScoreState();
     protected final ScorePlanner planner = new ScorePlanner();
     protected final BladeDebug report = new BladeDebug();
-    private final Map<ConfigKey<?>, Object> config = new HashMap<>();
+    private final Map<ConfigKey<?>, Object> config = new Object2ObjectOpenHashMap<>();
 
-    protected final List<BladeAction> actions = new ArrayList<>();
+    protected final ObjectArrayList<BladeAction> actions = new ObjectArrayList<>();
     protected BladeGoal goal = null;
     protected boolean enabled = false;
     protected BladeAction previousAction;
@@ -80,7 +79,7 @@ public class BladeMachine {
         actions.add(action);
     }
 
-    public List<BladeAction> getActions() {
+    public ObjectArrayList<BladeAction> getActions() {
         return actions;
     }
 

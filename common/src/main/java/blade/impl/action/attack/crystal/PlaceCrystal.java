@@ -40,7 +40,7 @@ public class PlaceCrystal extends BladeAction implements Crystal {
         Vec3 direction = lookAt.subtract(eyePos);
         float yaw = BotMath.getYaw(direction);
         float pitch = BotMath.getPitch(direction);
-        bot.lookRealistic(yaw, pitch, (tick % time) / time, bot.getBlade().get(ConfigKeys.DIFFICULTY) * 0.2f);
+        bot.lookRealistic(yaw, pitch, (tick % time) / time);
         if (tick >= time) {
             bot.interact();
         }

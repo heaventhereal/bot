@@ -75,7 +75,7 @@ public class ConsumeHealingPotion extends BladeAction implements Attack {
         
         if (potionStack.is(Items.SPLASH_POTION)) {
             float time = ConfigKeys.getDifficultyReversedCubic(bot) * 1.2f;
-            bot.lookRealistic(0.0f, 90.0f, tick / time, bot.getBlade().get(ConfigKeys.DIFFICULTY) * 0.2f);
+            bot.lookRealistic(0.0f, 90.0f, tick / time);
             if (bot.getVanillaPlayer().getXRot() < 80.0f) return;
 
             bot.setSneak(true);

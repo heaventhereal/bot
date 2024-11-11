@@ -1,6 +1,8 @@
 package blade.bot;
 
 import blade.util.ItemUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffect;
@@ -12,13 +14,11 @@ import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ServerBotSettings implements Cloneable {
-    private static final Map<EquipmentSlot, ArmorPiece> NETHERITE_ARMOR = new HashMap<>() {{
+    private static final Object2ObjectOpenHashMap<EquipmentSlot, ArmorPiece> NETHERITE_ARMOR = new Object2ObjectOpenHashMap<>() {{
         put(EquipmentSlot.HEAD, new ArmorPiece(ArmorType.NETHERITE, false));
         put(EquipmentSlot.CHEST, new ArmorPiece(ArmorType.NETHERITE, false));
         put(EquipmentSlot.LEGS, new ArmorPiece(ArmorType.NETHERITE, true));
@@ -35,21 +35,21 @@ public class ServerBotSettings implements Cloneable {
     public boolean autoHealing = true;
     public boolean moveTowardsSpawner = false;
 
-    public Map<EquipmentSlot, ArmorPiece> armor = new HashMap<>(NETHERITE_ARMOR);
+    public Object2ObjectOpenHashMap<EquipmentSlot, ArmorPiece> armor = new Object2ObjectOpenHashMap<>(NETHERITE_ARMOR);
 
     public boolean shield = false;
     public boolean autoHit = false;
 
     public float reach = 3.0f;
 
-    public Set<Holder<MobEffect>> effects = new HashSet<>();
+    public Set<Holder<MobEffect>> effects = new ObjectOpenHashSet<>();
 
     @Override
     public ServerBotSettings clone() {
         try {
             ServerBotSettings clone = (ServerBotSettings) super.clone();
-            clone.armor = new HashMap<>(clone.armor);
-            clone.effects = new HashSet<>(clone.effects);
+            clone.armor = new Object2ObjectOpenHashMap<>(clone.armor);
+            clone.effects = new ObjectOpenHashSet<>(clone.effects);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

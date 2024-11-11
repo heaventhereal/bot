@@ -13,6 +13,8 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandArguments;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.server.MinecraftServer;
@@ -33,17 +35,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class BotPlugin extends JavaPlugin {
     public static final TextColor PRIMARY = TextColor.color(0xFFCBD5);
     public static PaperPlatform platform;
-    private static final Map<String, BladeDebug> reports = new HashMap<>();
+    private static final Object2ObjectOpenHashMap<String, BladeDebug> reports = new Object2ObjectOpenHashMap<>();
 
     @Override
     public void onLoad() {
@@ -65,7 +64,7 @@ public class BotPlugin extends JavaPlugin {
                         .withPermission("bot.totem")
                         .executesPlayer((sender, args) -> {
                             Location pos = sender.getLocation();
-                            List<Bot> bots = new ArrayList<>(PaperPlatform.BOTS);
+                            ObjectArrayList<Bot> bots = new ObjectArrayList<>(PaperPlatform.BOTS);
                             for (Bot bot : bots) {
                                 if (bot instanceof IServerBot sBot && sBot.getSpawner().getUUID().equals(sender.getUniqueId())) {
                                     bot.destroy();
@@ -83,7 +82,7 @@ public class BotPlugin extends JavaPlugin {
                         .withPermission("bot.shield")
                         .executesPlayer((sender, args) -> {
                             Location pos = sender.getLocation();
-                            List<Bot> bots = new ArrayList<>(PaperPlatform.BOTS);
+                            ObjectArrayList<Bot> bots = new ObjectArrayList<>(PaperPlatform.BOTS);
                             for (Bot bot : bots) {
                                 if (bot instanceof IServerBot sBot && sBot.getSpawner().getUUID().equals(sender.getUniqueId())) {
                                     bot.destroy();
@@ -99,11 +98,12 @@ public class BotPlugin extends JavaPlugin {
                         }))
                 .then(new LiteralArgument("control")
                         .withPermission("bot.control")
-                        .then(createPossibleBots(new PlayerArgument("who"), args -> ((CraftPlayer) args.get("who")).getHandle())))
+                        .then(createPossibleBots(new PlayerArgument("who"), args -> ((CraftPlayer) Objects.requireNonNull(args.get("who"))).getHandle())))
                 .then(new LiteralArgument("spawn")
                         .withPermission("bot.spawn")
                         .then(createPossibleBots(new LocationArgument("where"), args -> {
                             Location pos = (Location) args.get("where");
+                            assert pos != null;
                             return new FakePlayer(platform, MinecraftServer.getServer(), CraftLocation.toVec3D(pos), pos.getYaw(), pos.getPitch(), ((CraftWorld) pos.getWorld()).getHandle(), IServerBot.getProfile());
                         })))
                 .then(new LiteralArgument("removeall")
@@ -251,9 +251,7 @@ public class BotPlugin extends JavaPlugin {
                                     inv.addItem(new ItemStack(Material.ARROW, 64));
                                     platform.addBot(bot);
                                     bot.interact(true);
-                                    bot.getVanillaPlayer().getBukkitEntity().getScheduler().runDelayed(BotPlugin.this, task -> {
-                                        bot.interact(false);
-                                    }, null, 40L);
+                                    bot.getVanillaPlayer().getBukkitEntity().getScheduler().runDelayed(BotPlugin.this, task -> bot.interact(false), null, 40L);
                                 })));
     }
 }

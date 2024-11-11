@@ -2,6 +2,8 @@ package blade.planner.score;
 
 import blade.debug.planner.ScorePlannerDebug;
 import blade.util.blade.BladeGoal;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.*;
 
@@ -9,10 +11,10 @@ public class ScorePlanner {
     private double temperature = 0.0;
     private Random random = new Random();
 
-    public <Action extends ScoreAction> Action plan(List<Action> actions, BladeGoal goal, ScoreState state, ScorePlannerDebug debug) {
+    public <Action extends ScoreAction> Action plan(ObjectArrayList<Action> actions, BladeGoal goal, ScoreState state, ScorePlannerDebug debug) {
         Objects.requireNonNull(goal);
         debug.setTemperature(temperature);
-        Map<Action, Score> scores = new HashMap<>();
+        Object2ObjectOpenHashMap<ScoreAction, Score> scores = new Object2ObjectOpenHashMap<>();
         double totalWeight = 0.0;
         Action highestScoreAction = null;
         double highestScore = 0.0;
@@ -38,19 +40,19 @@ public class ScorePlanner {
             totalWeight = 1.0;
         }
 
-        for (Map.Entry<Action, Score> entry : scores.entrySet()) {
+        for (Map.Entry<ScoreAction, Score> entry : scores.entrySet()) {
             Score score = entry.getValue();
             entry.setValue(new Score(score.score, score.scoreWithGoal, score.weight / totalWeight, score.satisfied));
         }
-        debug.setScores((Map<ScoreAction, Score>) scores);
+        debug.setScores(scores);
 
         double rand = random.nextDouble();
         double cumulativeWeight = 0.0;
-        for (Map.Entry<Action, Score> entry : scores.entrySet()) {
+        for (Map.Entry<ScoreAction, Score> entry : scores.entrySet()) {
             if (!entry.getValue().satisfied) continue;
             cumulativeWeight += entry.getValue().weight;
             if (rand <= cumulativeWeight) {
-                Action action = entry.getKey();
+                Action action = (Action) entry.getKey();
                 debug.setActionTaken(action);
                 return action;
             }
@@ -80,7 +82,7 @@ public class ScorePlanner {
         random = otherPlanner.random;
     }
 
-    public static record Score(double score, double scoreWithGoal, double weight, boolean satisfied) {
+    public record Score(double score, double scoreWithGoal, double weight, boolean satisfied) {
         @Override
         public String toString() {
             return String.format(Locale.ROOT, "S: %.3f SG: %.3f W: %.3f C: %s", score, scoreWithGoal, weight, satisfied);

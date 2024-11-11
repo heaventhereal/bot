@@ -25,6 +25,7 @@ import net.minecraft.world.phys.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -55,9 +56,7 @@ public class ClientSimulator {
         float g = 1.0F;
         Vec3 tmp = viewVector.multiply(d, d, d);
         AABB box = camera.getBoundingBox().expandTowards(tmp.x, tmp.y, tmp.z).inflate(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, eyePos, vec, box, (entity) -> {
-            return !entity.isSpectator() && entity.canBeHitByProjectile();
-        }, e);
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, eyePos, vec, box, (entity) -> !entity.isSpectator() && entity.canBeHitByProjectile(), e);
         return entityHitResult != null && entityHitResult.getLocation().distanceToSqr(eyePos) < f ? ensureTargetInRange(entityHitResult, eyePos, entityInteractionRange) : ensureTargetInRange(hitResult, eyePos, blockInteractionRange);
     }
 
@@ -115,7 +114,7 @@ public class ClientSimulator {
     }
 
     public void ensureVariables() {
-        player.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6);
+        Objects.requireNonNull(player.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(0.6);
     }
 
     public void tickMove() {
@@ -267,13 +266,13 @@ public class ClientSimulator {
         return handItem.useOn(context);
     }
 
-    private boolean doAttack() {
-        if (attackCooldown > 0) return false;
-        if (crosshairTarget == null) return false;
+    private void doAttack() {
+        if (attackCooldown > 0) return;
+        if (crosshairTarget == null) return;
         ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (crosshairTarget.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) crosshairTarget;
-            if (player.isSpectator()) return false;
+            if (player.isSpectator()) return;
             player.attack(entityHitResult.getEntity());
             player.resetAttackStrengthTicker();
         } else if (crosshairTarget.getType() == HitResult.Type.BLOCK) {
@@ -282,16 +281,16 @@ public class ClientSimulator {
             Level level = player.level();
             if (level.getBlockState(blockPos).isAir()) {
                 player.swing(InteractionHand.MAIN_HAND);
-                return false;
+                return;
             }
             attackBlockInternal(blockPos, blockHitResult.getDirection());
-            return level.getBlockState(blockPos).isAir();
+            level.getBlockState(blockPos).isAir();
+            return;
         } else if (crosshairTarget.getType() == HitResult.Type.MISS) {
             attackCooldown = 10;
             player.resetAttackStrengthTicker();
         }
         player.swing(InteractionHand.MAIN_HAND);
-        return false;
     }
 
     private void attackBlockInternal(BlockPos pos, Direction direction) {

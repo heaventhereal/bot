@@ -2,7 +2,8 @@ package blade.inventory;
 
 import blade.Bot;
 import blade.event.InventoryEvents;
-import com.google.common.collect.ImmutableList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -11,6 +12,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -18,13 +21,15 @@ import java.util.function.Predicate;
 public class BotInventory {
     protected final Bot bot;
     protected final Inventory inventory;
-    protected final ImmutableList<NonNullList<ItemStack>> compartments;
+    protected final ObjectList<NonNullList<ItemStack>> compartments;
     protected boolean inventoryOpen = false;
 
     public BotInventory(Bot bot) {
         this.bot = bot;
         this.inventory = bot.getVanillaPlayer().getInventory();
-        this.compartments = ImmutableList.of(inventory.items, inventory.armor, inventory.offhand);
+        this.compartments = (ObjectList<NonNullList<ItemStack>>) Collections.unmodifiableList(
+                new ObjectArrayList<>(Arrays.asList(inventory.items, inventory.armor, inventory.offhand))
+        );
     }
 
 
@@ -84,7 +89,7 @@ public class BotInventory {
     }
 
     public ItemStack getOffHand() {
-        return inventory.offhand.get(0);
+        return inventory.offhand.getFirst();
     }
 
     public List<ItemStack> getArmor() {
@@ -107,8 +112,8 @@ public class BotInventory {
         inventory.setItem(fromVanillaIndex, inventory.getItem(toVanillaIndex));
         inventory.setItem(toVanillaIndex, tmp);
         if (getBot().getVanillaPlayer() instanceof ServerPlayer serverPlayer) {
-            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.incrementStateId(), from.getIndex(), inventory.getItem(from.getIndex())));
-            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.incrementStateId(), to.getIndex(), inventory.getItem(to.getIndex())));
+            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.incrementStateId(), from.index(), inventory.getItem(from.index())));
+            serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.incrementStateId(), to.index(), inventory.getItem(to.index())));
         }
     }
 

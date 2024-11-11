@@ -1,16 +1,16 @@
 package blade.planner.score;
 
 import blade.Bot;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ScoreState {
-    public static final Set<StateKey> KEYS = new HashSet<>();
+    public static final Set<StateKey> KEYS = new ObjectOpenHashSet<>();
 
-    private final Map<StateKey, Double> values = new HashMap<>();
+    private final Map<StateKey, Double> values = new Object2DoubleOpenHashMap<>();
 
     public ScoreState() {
         updateValues();

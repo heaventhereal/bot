@@ -47,9 +47,7 @@ public class BotSettingGui {
                     .setDisplayName(wrap("<red>You can't edit a Kit Bot."))));
 
             gui.setItem(4, 5, new SimpleItem(new ItemBuilder(Material.BARRIER)
-                    .setDisplayName(wrap("<red>Close")), click -> {
-                click.getPlayer().closeInventory();
-            }));
+                    .setDisplayName(wrap("<red>Close")), click -> click.getPlayer().closeInventory()));
             Window.single()
                     .setGui(gui)
                     .setTitle(wrap("<aqua>Bot Settings"))
@@ -191,9 +189,7 @@ public class BotSettingGui {
         }
 
         gui.setItem(4, 5, new SimpleItem(new ItemBuilder(Material.BARRIER)
-                .setDisplayName(wrap("<red>Close")), click -> {
-            click.getPlayer().closeInventory();
-        }));
+                .setDisplayName(wrap("<red>Close")), click -> click.getPlayer().closeInventory()));
         Window.single()
                 .setGui(gui)
                 .setTitle(wrap("<aqua>Bot Settings"))

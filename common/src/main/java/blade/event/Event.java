@@ -1,18 +1,18 @@
 package blade.event;
 
 import blade.Bot;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.function.Function;
 
 public class Event<T> {
     private final Class<? extends T> typeClass;
     private final T empty;
     private final Function<T[], T> factory;
-    private Map<Bot, Invoker<T>> invokers = new WeakHashMap<>();
+    private final Map<Bot, Invoker<T>> invokers = new Object2ObjectOpenHashMap<>();
 
     @SuppressWarnings("unchecked")
     public Event(Class<? extends T> typeClass, Function<T[], T> factory) {

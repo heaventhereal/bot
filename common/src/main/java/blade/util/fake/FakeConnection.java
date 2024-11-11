@@ -20,7 +20,7 @@ public class FakeConnection extends Connection {
     static {
         try {
             Connection$channel = Connection.class.getDeclaredField("channel");
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException ignored) {
         }
     }
 

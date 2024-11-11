@@ -5,6 +5,7 @@ import blade.platform.ServerPlatform;
 import blade.util.ClientSimulator;
 import blade.util.fake.FakeConnection;
 import blade.util.fake.FakePlayer;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,16 +17,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class PaperPlatform implements ServerPlatform {
     public static JavaPlugin PLUGIN;
-    public static final List<Bot> BOTS = new ArrayList<>();
-    public static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(2);
+    public static final ObjectArrayList <Bot> BOTS = new ObjectArrayList<>();
+    public static final ScheduledExecutorService EXECUTOR = (ScheduledExecutorService) Executors.newCachedThreadPool();
 
     public void register(JavaPlugin plugin) {
         PLUGIN = plugin;
@@ -65,7 +64,7 @@ public class PaperPlatform implements ServerPlatform {
     }
 
     public void removeAll() {
-        ArrayList<Bot> bots = new ArrayList<>(BOTS);
+        ObjectArrayList <Bot> bots = new ObjectArrayList <>(BOTS);
         for (Bot bot : bots) {
             bot.destroy();
         }

@@ -42,10 +42,10 @@ public record CrystalPosition(BlockPos obsidian, Vec3 placeAgainst, AABB crystal
                     if (ShapeUtil.intersects(targetAABB, new AABB(currentPos))) continue;
                     Vec3 placeAgainst = getPlaceAgainst(world, botHeadPos, currentPos);
                     if (placeAgainst == null) continue;
-                    if (!ClipUtil.hasLineOfSightPerformant(world, botHeadPos, Vec3.atCenterOf(currentPos))) continue;
-                    if (!ClipUtil.hasLineOfSightPerformant(world, botHeadPos, Vec3.atCenterOf(currentPos.above()))) continue;
+                    if (ClipUtil.hasLineOfSightPerformant(world, botHeadPos, Vec3.atCenterOf(currentPos))) continue;
+                    if (ClipUtil.hasLineOfSightPerformant(world, botHeadPos, Vec3.atCenterOf(currentPos.above()))) continue;
                     Vec3 crystalBottom = Vec3.atBottomCenterOf(currentPos.above());
-                    AABB crystalAABB = new AABB(crystalBottom.x - 1.0, crystalBottom.y, crystalBottom.z - 1.0, crystalBottom.x + 1.0, crystalBottom.y + 2.0, crystalBottom.z + 1.0);;
+                    AABB crystalAABB = new AABB(crystalBottom.x - 1.0, crystalBottom.y, crystalBottom.z - 1.0, crystalBottom.x + 1.0, crystalBottom.y + 2.0, crystalBottom.z + 1.0);
                     double score = getScore(world, target, currentPos, state);
                     if (bestPos == null || score > bestScore) {
                         bestPos = currentPos;

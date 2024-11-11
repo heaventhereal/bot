@@ -2,15 +2,15 @@ package blade.debug;
 
 import blade.debug.planner.ScorePlannerDebug;
 import blade.planner.score.ScoreState;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DebugFrame {
-    private final List<ReportError> errors = new ArrayList<>();
+    private final List<ReportError> errors = new ObjectArrayList<>();
 
     private ScoreState state;
-    private ScorePlannerDebug planner = new ScorePlannerDebug();
+    private final ScorePlannerDebug planner = new ScorePlannerDebug();
 
     public List<ReportError> getErrors() {
         return errors;

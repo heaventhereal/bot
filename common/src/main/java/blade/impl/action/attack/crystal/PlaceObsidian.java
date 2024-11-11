@@ -39,7 +39,7 @@ public class PlaceObsidian extends BladeAction implements Crystal {
         Vec3 direction = lookAt.subtract(eyePos);
         float yaw = BotMath.getYaw(direction);
         float pitch = BotMath.getPitch(direction);
-        bot.lookRealistic(yaw, pitch, (tick % time) / time, 0);
+        bot.lookRealistic(yaw, pitch, (tick % time) / time);
         if (tick >= time) {
             bot.interact();
         }
