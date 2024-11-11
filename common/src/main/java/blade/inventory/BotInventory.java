@@ -2,8 +2,7 @@ package blade.inventory;
 
 import blade.Bot;
 import blade.event.InventoryEvents;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -12,8 +11,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,15 +18,13 @@ import java.util.function.Predicate;
 public class BotInventory {
     protected final Bot bot;
     protected final Inventory inventory;
-    protected final ObjectList<NonNullList<ItemStack>> compartments;
+    protected final List<NonNullList<ItemStack>> compartments;
     protected boolean inventoryOpen = false;
 
     public BotInventory(Bot bot) {
         this.bot = bot;
         this.inventory = bot.getVanillaPlayer().getInventory();
-        this.compartments = (ObjectList<NonNullList<ItemStack>>) Collections.unmodifiableList(
-                new ObjectArrayList<>(Arrays.asList(inventory.items, inventory.armor, inventory.offhand))
-        );
+        this.compartments = ImmutableList.of(inventory.items, inventory.armor, inventory.offhand);
     }
 
 
